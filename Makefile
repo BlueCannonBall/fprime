@@ -1,5 +1,12 @@
-all: main.cpp
-	g++ main.cpp -s -O2 -lboost_program_options -pthread -o fprime
+CC=g++
+CFLAGS=-s -O2 -lboost_program_options -pthread
+TARGET=fprime
+
+fprime: main.cpp
+	$(CC) main.cpp $(CFLAGS) -o $(TARGET)
 
 install:
-	cp fprime /usr/local/bin
+	cp $(TARGET) /usr/local/bin
+
+clean:
+	$(RM) $(TARGET)
