@@ -7,8 +7,7 @@
 using namespace std;
 using namespace boost::program_options;
 
-vector<unsigned int> primes;
-vector<thread> threads;
+vector<vector<unsigned int>*> primes;
 
 bool is_prime(unsigned int num) {
     if (num == 2 || num == 3) {
@@ -46,7 +45,7 @@ void find_primes(unsigned start_num, unsigned end_num, vector<unsigned int>* arr
 
 void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_count) {
     vector<vector<unsigned int>> ranges;
-    vector<vector<unsigned int>*> prime_arrays;
+    vector<thread> threads;
     unsigned int chunk_size = (end_num - start_num) / thread_count;
     for (unsigned int thread = 0; thread<thread_count; thread++) {
         vector<unsigned int> range;
@@ -58,16 +57,11 @@ void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_
         ranges.push_back(range);
     }
     for (const auto& range : ranges) {
-        prime_arrays.push_back(new vector<unsigned int>);
-        threads.push_back(thread(find_primes, range[0], range[1], prime_arrays[prime_arrays.size() - 1]));
+        primes.push_back(new vector<unsigned int>);
+        threads.push_back(thread(find_primes, range[0], range[1], primes[primes.size() - 1]));
     }
     for (unsigned int thread = 0; thread<thread_count; thread++) {
         threads[thread].join();
-    }
-    for (const auto arr : prime_arrays) {
-        for (unsigned int prime : *arr) {
-            primes.push_back(prime);
-        }
     }
 }
 
@@ -106,12 +100,15 @@ int main(int argc, const char *argv[]) {
         threaded_find_primes(start_num, end_num, thread_count);
 
         stringstream ss;
-        for (size_t i = 0; i < primes.size(); ++i) {
-            if (i != 0)
-                ss << "\n";
-            ss << primes[i];
+        for (const auto arr : primes) {
+            for (size_t i = 0; i<arr->size(); ++i) {
+                if (i != 0)
+                    ss << "\n";
+                ss << arr->at(i);
+            }
+            //delete arr;
         }
-        cout << ss.str();
+        cout << ss.str() << endl;
 
         return 0;
     }
