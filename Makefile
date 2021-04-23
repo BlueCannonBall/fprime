@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-s -O2 -lboost_program_options -pthread
+CFLAGS=-Wall -s -O2 -lboost_program_options -pthread
 TARGET=fprime
 
 fprime: main.cpp
