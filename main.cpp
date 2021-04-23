@@ -79,7 +79,7 @@ int main(int argc, const char *argv[]) {
         unsigned int thread_count = 8;
 
         desc.add_options()
-            ("help,h", "Help screen")
+            ("help,h", "This help screen")
             ("start-num", value(&start_num)->required(), "Starting number")
             ("end-num", value(&end_num)->required(), "Ending number")
             ("threads,t", value(&thread_count), "Amount of threads")
