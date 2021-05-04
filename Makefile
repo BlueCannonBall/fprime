@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -s -Ofast -march=native -mtune=native -fno-signed-zeros -fno-trapping-math -frename-registers -funroll-loops -flto -D_GLIBCXX_PARALLEL -lboost_program_options -pthread -fopenmp
+CFLAGS=-Wall -s -Ofast -flto -lboost_program_options -pthread
 TARGET=fprime
 
 fprime: main.cpp
