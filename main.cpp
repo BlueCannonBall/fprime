@@ -14,13 +14,13 @@ bool is_prime(unsigned int num) {
         return true;
     } else if (num == 0 || num == 1) {
         return false;
-    } else if (num%2 == 0 || num%3 == 0) {
+    } else if (num % 2 == 0 || num % 3 == 0) {
         return false;
     }
 
     unsigned int i = 5;
     while (i*i <= num) {
-        if (num%i == 0 || num%(i + 2) == 0) {
+        if (num % i == 0 || num % (i + 2) == 0) {
             return false;
         }
         i += 6;
@@ -28,17 +28,18 @@ bool is_prime(unsigned int num) {
     return true;
 }
 
-void find_primes(unsigned start_num, unsigned end_num, vector<unsigned int>* arr) {
-    if (start_num%2 == 0) {
+void find_primes(unsigned start_num, unsigned end_num, vector<unsigned int>* vec) {
+    if (start_num % 2 == 0) {
         if (start_num == 2 || start_num == 0) {
-            arr->push_back(2);
+            vec->push_back(2);
         }
         start_num += 1;
     }
 
+    #pragma omp simd
     for (unsigned int i = start_num; i<end_num; i+=2) {
         if (is_prime(i)) {
-            arr->push_back(i);
+            vec->push_back(i);
         }
     }
 }
@@ -47,6 +48,7 @@ void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_
     vector<vector<unsigned int>> ranges;
     vector<thread> threads;
     unsigned int chunk_size = (end_num - start_num) / thread_count;
+    #pragma omp simd
     for (unsigned int thread = 0; thread<thread_count; thread++) {
         vector<unsigned int> range;
         if (thread == thread_count - 1) {
@@ -76,13 +78,13 @@ int main(int argc, const char *argv[]) {
     try {
         unsigned int start_num;
         unsigned int end_num;
-        unsigned int thread_count = 8;
+        unsigned int thread_count = thread::hardware_concurrency();
 
         desc.add_options()
             ("help,h", "This help screen")
             ("start-num", value(&start_num)->required(), "Starting number")
             ("end-num", value(&end_num)->required(), "Ending number")
-            ("threads,t", value(&thread_count), "Amount of threads")
+            ("threads,t", value(&thread_count), "Amount of threads, depends on hardware thread count by default")
         ;
         positional_options_description p;
         p.add("start-num", 1);
@@ -100,13 +102,13 @@ int main(int argc, const char *argv[]) {
         threaded_find_primes(start_num, end_num, thread_count);
 
         stringstream ss;
-        for (const auto arr : primes) {
-            for (size_t i = 0; i<arr->size(); ++i) {
+        for (const auto vec : primes) {
+            #pragma omp simd
+            for (size_t i = 0; i<vec->size(); ++i) {
                 if (i != 0)
                     ss << "\n";
-                ss << arr->at(i);
+                ss << vec->at(i);
             }
-            //delete arr;
         }
         cout << ss.str() << endl;
 
