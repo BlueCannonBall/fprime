@@ -48,6 +48,7 @@ void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_
     vector<vector<unsigned int>> ranges;
     vector<thread> threads;
     unsigned int chunk_size = (end_num - start_num) / thread_count;
+
     #pragma omp simd
     for (unsigned int thread = 0; thread<thread_count; thread++) {
         vector<unsigned int> range;
@@ -58,6 +59,7 @@ void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_
         }
         ranges.push_back(range);
     }
+
     for (const auto& range : ranges) {
         primes.push_back(new vector<unsigned int>);
         threads.push_back(thread(find_primes, range[0], range[1], primes[primes.size() - 1]));
@@ -103,6 +105,7 @@ int main(int argc, const char *argv[]) {
 
         stringstream ss;
         for (const auto vec : primes) {
+            
             #pragma omp simd
             for (size_t i = 0; i<vec->size(); ++i) {
                 if (i != 0)
