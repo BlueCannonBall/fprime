@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-Wall -s -Ofast -flto -lboost_program_options -pthread -fopenmp-simd
 TARGET=fprime
 
-fprime: main.cpp
+$(TARGET): main.cpp
 	$(CC) main.cpp $(CFLAGS) -o $@
 
 .PHONY: install clean
