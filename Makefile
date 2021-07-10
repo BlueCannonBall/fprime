@@ -5,6 +5,8 @@ TARGET=fprime
 fprime: main.cpp
 	$(CC) main.cpp $(CFLAGS) -o $@
 
+.PHONY: install clean
+
 install:
 	cp $(TARGET) /usr/local/bin
 
