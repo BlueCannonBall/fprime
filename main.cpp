@@ -3,6 +3,7 @@
 #include <thread>
 #include <boost/program_options.hpp>
 #include <sstream>
+#include <utility>
 
 using namespace std;
 using namespace boost::program_options;
@@ -45,7 +46,7 @@ void find_primes(unsigned start_num, unsigned end_num, vector<unsigned int>* vec
 }
 
 void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_count) {
-    vector<vector<unsigned int>> ranges;
+    vector<pair<unsigned int, unsigned int>> ranges;
     vector<thread> threads;
     unsigned int chunk_size = (end_num - start_num) / thread_count;
 
