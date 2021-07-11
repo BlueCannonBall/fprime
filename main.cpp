@@ -52,7 +52,7 @@ void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_
 
     #pragma omp simd
     for (unsigned int thread = 0; thread<thread_count; thread++) {
-        vector<unsigned int> range;
+        pair<unsigned int, unsigned int> range;
         if (thread == thread_count - 1) {
             range = {start_num + (chunk_size * thread), end_num};
         } else {
@@ -63,7 +63,7 @@ void threaded_find_primes(unsigned start_num, unsigned end_num, unsigned thread_
 
     for (const auto& range : ranges) {
         primes.push_back(new vector<unsigned int>);
-        threads.push_back(thread(find_primes, range[0], range[1], primes[primes.size() - 1]));
+        threads.push_back(thread(find_primes, range.first, range.second, primes[primes.size() - 1]));
     }
     for (unsigned int thread = 0; thread<thread_count; thread++) {
         threads[thread].join();
