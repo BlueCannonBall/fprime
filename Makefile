@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -s -Ofast -flto -lboost_program_options -pthread -fopenmp-simd -march=native -ftree-vectorize
+CFLAGS=-Wall -s -Ofast -lboost_program_options -pthread -fopenmp-simd -march=native -ftree-vectorize
 TARGET=fprime
 
 $(TARGET): main.cpp
