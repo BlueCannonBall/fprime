@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -s -Ofast -lboost_program_options -pthread -fopenmp-simd -march=native -ftree-vectorize -fvect-cost-model=dynamic
+CFLAGS=-Wall -s -Ofast -lboost_program_options -pthread -fopenmp-simd -march=native -ftree-vectorize
 TARGET=fprime
 
 $(TARGET): main.cpp
